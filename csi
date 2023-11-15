@@ -1,0 +1,26 @@
+#!/bin/bash
+
+
+packages=$(pacman -Q | wc -l)
+
+memory=$(free -h --kilo | awk '/^Mem:/ {print $3}')
+
+backlight=$(light -G); backlight=${backlight%.*}%
+
+sound() {
+    MUTE=$(amixer sget Master | tail -n1 | sed -r "s/.*\[(.*)\]/\1/")
+    VOL=$(amixer get Master | tail -n1 | sed -r "s/.*\[(.*)%\].*/\1/")
+
+    if [ "$MUTE" = "off" ]; then
+        printf "Mute"
+    else
+        printf "%s%%" "$VOL"
+    fi
+}
+
+battery=`battery`
+
+date=$(date "+%a %d %H:%M")
+
+
+echo "[P: $packages]    [M: $memory]    [L: $backlight]    [S: $(sound)]    [B: $battery]    [$date]"

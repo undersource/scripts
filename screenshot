@@ -1,0 +1,21 @@
+#!/bin/sh
+
+SCREENSHOT_DIR="$HOME/Pictures/screenshot"
+
+if [ ! -d $SCREENSHOT_DIR ]; then
+    mkdir -p $SCREENSHOT_DIR
+fi
+
+screenshots=`find $SCREENSHOT_DIR -name screen-*.png`
+
+if [[ $screenshots == "" ]]; then
+    grim $SCREENSHOT_DIR/screen-0.png
+else
+    last_screen=`echo "$screenshots" | sort | tail -n 1`
+    regex="[0-9]+"
+
+    [[ $last_screen =~ $regex ]]
+    number="${BASH_REMATCH[0]}"
+
+    grim $SCREENSHOT_DIR/screen-$((number + 1)).png
+fi

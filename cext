@@ -1,0 +1,17 @@
+#!/bin/sh
+
+if [[ ! $# -eq 1 ]]; then
+    echo "Enter extension id"
+    exit 1
+fi
+
+if [ ! -f /bin/chromium ]; then
+    echo "Install chromium"
+    exit 1
+fi
+
+browserVersion=`chromium --version | awk '{ print $2 }'`
+browserVersion="${browserVersion%%.*}"
+extID=$1
+
+chromium "https://clients2.google.com/service/update2/crx?response=redirect&acceptformat=crx2,crx3&prodversion=${browserVersion}&x=id%3D${extID}%26installsource%3Dondemand%26uc"

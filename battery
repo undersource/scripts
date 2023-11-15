@@ -1,0 +1,16 @@
+#!/bin/sh
+
+FILES=(`ls /sys/class/power_supply`)
+
+for file in ${FILES[*]}; do
+    if [[ $file == BAT* ]]; then
+        ((BATTERIES_COUNT+=1))
+    fi
+done
+
+for ((num = 0; num <= BATTERIES_COUNT - 1; num++)); do
+    scapacity=`cat /sys/class/power_supply/BAT$num/capacity`
+    ((capacity+=$scapacity))
+done
+
+echo $(($capacity / $BATTERIES_COUNT))%

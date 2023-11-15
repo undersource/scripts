@@ -1,0 +1,30 @@
+#!/bin/bash
+
+connect() {
+    bluetoothctl connect $HPMAC
+}
+
+
+disconnect() {
+    bluetoothctl disconnect $HPMAC
+}
+
+
+help() {
+    echo Args: c, d, help
+}
+
+
+if [ $# -eq 1 ]; then
+    if [ $1 == "c" ]; then
+        connect
+    elif [ $1 == "d" ]; then
+        disconnect
+    elif [ $1 == "help" ]; then
+        help
+    else
+        echo Unknown argument, use \"help\"
+    fi
+else
+    help
+fi

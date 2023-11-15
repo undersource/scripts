@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [[ $1 == "-s" ]]; then
+    curl -s wttr.in/$CITY?format=2 | tr -s ' '
+elif [[ $1 == "-d" ]]; then
+    if [[ `pidof -x wtr | grep -o ' ' | wc -l` -lt 2 ]]; then
+        while :; do
+            curl -s wttr.in/$CITY?format=1 | awk '{print $2}' > /tmp/weather
+
+            sleep $((60 * 60 * 1))
+        done
+    fi
+else
+    curl wttr.in/$CITY
+fi

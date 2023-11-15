@@ -1,0 +1,35 @@
+#!/bin/bash
+
+
+mountDisk() {
+    read -s -p "Password: " password
+    echo -e "$password\n" | cryptsetup open /dev/sdb1 crypt
+    echo
+    mount /dev/mapper/crypt /mnt
+}
+
+
+unmountDisk() {
+    umount -R /mnt
+    cryptsetup close crypt
+}
+
+
+help() {
+    echo Args: m, u, help
+}
+
+
+if [ $# -eq 1 ]; then
+    if [ $1 == "m" ]; then
+        mountDisk
+    elif [ $1 == "u" ]; then
+        unmountDisk
+	elif [ $1 == "help" ]; then
+		help
+	else
+		echo Unknown argument, use \"help\"
+	fi
+else
+    help
+fi
