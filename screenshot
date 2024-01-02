@@ -1,21 +1,21 @@
 #!/bin/sh
 
-SCREENSHOT_DIR="$HOME/Pictures/screenshot"
+SCREENSHOT_DIR="$HOME/Pictures/screenshots"
 
 if [ ! -d $SCREENSHOT_DIR ]; then
     mkdir -p $SCREENSHOT_DIR
 fi
 
-screenshots=`find $SCREENSHOT_DIR -name screen-*.png`
+screenshots=$(find $SCREENSHOT_DIR -name screen-*.png)
 
-if [[ $screenshots == "" ]]; then
-    grim $SCREENSHOT_DIR/screen-0.png
+if [ -z "$screenshots" ]; then
+    grim "$SCREENSHOT_DIR/screen-00.png"
 else
-    last_screen=`echo "$screenshots" | sort | tail -n 1`
-    regex="[0-9]+"
+    last_screen=$(echo "$screenshots" | sort -t- -k2 -n | tail -n 1)
 
-    [[ $last_screen =~ $regex ]]
-    number="${BASH_REMATCH[0]}"
+    if echo "$last_screen" | grep -Eq "[0-9]+"; then
+        number=$(echo "$last_screen" | grep -Eo "[0-9]+")
 
-    grim $SCREENSHOT_DIR/screen-$((number + 1)).png
+        grim "$SCREENSHOT_DIR/screen-$((number + 1)).png"
+    fi
 fi
